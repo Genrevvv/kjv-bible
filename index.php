@@ -11,29 +11,56 @@
     });
 
     $router->add('/get-books', function() {
+        header('Content-Type: application/json');
+
         $db = connectDB();
         
-        $result = $db->query('SELECT * FROM KJV_books');
-        $data = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $input = file_get_contents('php://input');
+            $data = json_decode($input, true);
 
-        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $data[] = $row;
+            $stmt = $db->prepare('SELECT * FROM KJV_books WHERE id = :bookID');
+            $stmt->bindValue(':bookID', $data['bookID'], SQLITE3_INTEGER );
+
+            $bookName = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
+
+            echo json_encode($bookName);
+        }
+        else {
+            $result = $db->query('SELECT * FROM KJV_books');
+            $data = [];
+    
+            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+                $data[] = $row;
+            }
+    
+            $db->close();
+    
+            echo json_encode($data);
         }
 
         $db->close();
-
-        header('Content-Type: application/json');
-        echo json_encode($data);
     });
 
-    $router->add('#^/books/(\d+)$#', function ($bookID) {
+    $router->add('#^/books/([a-z\-]+)$#', function ($bookName) {
+        include 'book.html';
+    });
+
+    $router->add('/load-book', function () {
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true);
+        $bookName = $data['bookName'];
+        $bookName = str_replace('-', ' ', $bookName);
+        
         $db = connectDB();
         
         $data = [];
 
-        $stmt = $db->prepare('SELECT name FROM KJV_books WHERE id = :bookID');
-        $stmt->bindValue(':bookID', $bookID, SQLITE3_INTEGER);
-        $bookName = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
+        $stmt = $db->prepare('SELECT * FROM KJV_books WHERE LOWER(name) = :bookName');
+        $stmt->bindValue(':bookName', $bookName, SQLITE3_TEXT);
+        $result = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
+        $bookID = $result['id'];
+        $bookName = $result['name'];
 
         $stmt = $db->prepare('SELECT chapter, verse, text FROM KJV_verses WHERE book_id = :bookID');
         $stmt->bindValue(':bookID', $bookID, SQLITE3_INTEGER);
@@ -43,15 +70,14 @@
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
             $verses[] = $row;
         }
-
-        $data['bookName'] = $bookName['name'];
-        $data['bookSection'] = $bookID < 40 ? 'old-testament' : 'new-testament';
+        
+        $data['bookName'] = $bookName;
         $data['verses'] = $verses;
-    
-        $uri = $_SERVER['REQUEST_URI'];
-
+        
         header('Content-Type: application/json');
-        echo json_encode($data);    
+        echo json_encode($data); 
+        
+        //$db->close();
     });
 
     $router->dispatch($path);

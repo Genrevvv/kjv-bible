@@ -37,9 +37,21 @@ function getBook(event) {
     const book = event.target;
     const bookID = books.get(book);
 
-    console.log(`/books/${bookID}`);
+    const options = {
+        method: 'POST',
+        header: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bookID: bookID })
+    };
 
-    window.location.href = `book.html?bookID=${bookID}`;
+    fetch('/get-books', options)
+        .then(res => res.json())
+        .then(data => {
+            window.location.href = '/books/' + data['name'].replace(' ', '-').toLowerCase();;
+        });
+
+    // console.log(`/books/${bookID}`);
+
+    // window.location.href = `book.html?bookID=${bookID}`;
 
     /*
     fetch(`/books/${bookID}`)

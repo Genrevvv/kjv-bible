@@ -1,15 +1,21 @@
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString)
-const bookID = urlParams.get('bookID');
+const path = (window.location.pathname).split('/').filter(Boolean);
+const bookName = path[1];
 
-fetch(`/books/${bookID}`)
+//console.log(window.location.pathname)
+//console.log(bookName)
+
+const options = {
+    method: 'POST',
+    header: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ bookName: bookName })
+};
+
+fetch(`/load-book`, options)
     .then(res => res.json())
-    .then(data => {
-        localStorage.setItem('bookID', bookID);
-        
+    .then(data => {        
         console.log(data);
-
-        const bookSection = data['bookSection'];
+        
+        // const bookSection = data['bookSection'];
         const bookName = data['bookName'];
         const verses = data['verses'].filter(verse => verse.chapter === 1);
 
@@ -32,12 +38,4 @@ fetch(`/books/${bookID}`)
 
             versesCont.appendChild(verseElmnt);
         }
-});
-
-window.addEventListener('load', () => {
-    //window.location.href = path;
-    const bookID = localStorage.getItem('bookID');
-    console.log(bookID);
-    // history.replaceState(null, '', `/book.html?bookID=${bookID}`);
-    console.log("adada");
 });
