@@ -46,7 +46,7 @@
     });
 
     $router->add('#^/(new-testament|old-testament)/([a-z\-]+)$#', function ($bookName) {
-        include 'book.html';
+        include './html/book.html';
     });
 
     $router->add('/load-book', function () {
