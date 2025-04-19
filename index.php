@@ -21,10 +21,13 @@
 
             $stmt = $db->prepare('SELECT * FROM KJV_books WHERE id = :bookID');
             $stmt->bindValue(':bookID', $data['bookID'], SQLITE3_INTEGER );
+            $result = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
+            
+            $bookData = [];
+            $bookData['section'] = $result['id'] < 40 ? 'old-testament' : 'new-testament';
+            $bookData['name'] = $result['name'];
 
-            $bookName = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
-
-            echo json_encode($bookName);
+            echo json_encode($bookData);
         }
         else {
             $result = $db->query('SELECT * FROM KJV_books');
@@ -42,7 +45,7 @@
         $db->close();
     });
 
-    $router->add('#^/books/([a-z\-]+)$#', function ($bookName) {
+    $router->add('#^/(new-testament|old-testament)/([a-z\-]+)$#', function ($bookName) {
         include 'book.html';
     });
 
@@ -77,7 +80,7 @@
         header('Content-Type: application/json');
         echo json_encode($data); 
         
-        //$db->close();
+        $db->close();
     });
 
     $router->dispatch($path);

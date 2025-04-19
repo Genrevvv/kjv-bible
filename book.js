@@ -19,8 +19,6 @@ fetch(`/load-book`, options)
         const bookName = data['bookName'];
         const verses = data['verses'].filter(verse => verse.chapter === 1);
 
-        // history.replaceState(null, '', `/${bookSection}/${bookName.toLowerCase()}`);
-
         const title = document.getElementById('book-title');
         title.innerText = `${bookName}`;
 

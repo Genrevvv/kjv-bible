@@ -46,8 +46,8 @@ function getBook(event) {
     fetch('/get-books', options)
         .then(res => res.json())
         .then(data => {
-            window.location.href = '/books/' + data['name'].replace(' ', '-').toLowerCase();;
-        });
+            window.location.href = `/${data['section']}/` + data['name'].replaceAll(' ', '-').toLowerCase();
+        })
 
     // console.log(`/books/${bookID}`);
 
