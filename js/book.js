@@ -31,6 +31,7 @@ fetch(`/load-book`, options)
         let verseElmnt = null;
         for (verse of verses) {
             verseElmnt = document.createElement('div');
+            verseElmnt.classList.add('verse');
             verseElmnt.innerHTML = `<span>${verse['verse']}</span>
                                     <p>${verse['text']}</p>`;
 
