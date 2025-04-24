@@ -5,6 +5,9 @@ A King James Bible website made with PHP.
 1. PHP
 2. SQLite3
 
+## Bible database
+Source: [scrollmapper/bible-databases/formats/sqlite/KJV.db](https://github.com/scrollmapper/bible_databases/tree/master/formats/sqlite)
+
 ### How to run:
 1. Navigate to the project directory:
    ```bash
