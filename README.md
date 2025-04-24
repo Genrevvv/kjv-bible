@@ -1,7 +1,7 @@
 ## KJV Bible
 A King James Bible website made with PHP.
 
-### Dependencies:
+### Requirements:
 1. PHP
 2. SQLite3
 
