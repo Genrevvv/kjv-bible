@@ -1,5 +1,5 @@
 ## KJV Bible
-A King James Bible website made with PHP.
+A King James Version Bible website made with PHP.
 
 ### Requirements:
 1. PHP
