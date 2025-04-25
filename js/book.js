@@ -13,7 +13,7 @@ const options = {
 fetch(`/load-book`, options)
     .then(res => res.json())
     .then(data => {        
-        console.log(data);
+        // console.log(data);
 
         const bookName = data['bookName'];
         const lastChapter = data['verses'][data['verses'].length - 1].chapter;
