@@ -1,3 +1,11 @@
+:root {
+    --odd-row: #ffffff;
+    --odd-row-hover: #f1f1f1;
+
+    --even-row: #dfdfdf;
+    --even-row-hover: #b6b6b6;
+}
+
 body {
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     margin: 0;
@@ -8,13 +16,22 @@ main {
     height: 100vh;
 }   
 
-.container {
+#container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.container .chapter-btn {
+#content #header #book-name  {
+    font-size: 45px;
+}
+
+#content #header #select-chapter {
+    margin-top: 10px;
+    font-size: 17px;
+}
+
+#container .chapter-btn {
     display: flex;
     justify-content: center;
     gap: 10px;
@@ -22,11 +39,11 @@ main {
     margin-top: 20px;
 }
 
-.container .chapter-btn button {
+#container .chapter-btn button {
     padding: 7px 15px;
 }
 
-.container #content {
+#container #content {
     width: 100%;
     max-width: 1000px;
 
@@ -41,15 +58,6 @@ main {
     align-items: center;
 
     margin-top: 20px;
-}
-
-#content #header h1  {
-    font-size: 45px;
-}
-
-#content #header h3 {
-    margin-top: 10px;
-    font-size: 20px;
 }
 
 #content #header h1,
@@ -80,3 +88,44 @@ main {
     font-size: 18px;
 }
 
+#container #chapter-list {
+    max-width: 120px;
+    max-height: 400px;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(236, 236, 236);
+    
+    margin-top: 5px;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#container #chapter-list .verse-n {
+    padding: 2px 0;
+    cursor: pointer;
+}
+
+#container #chapter-list .verse-n:nth-child(odd) {
+    background-color: var(--odd-row);
+}
+
+#container #chapter-list .verse-n:nth-child(even) {
+    background-color: var(--even-row)
+}
+
+#container #chapter-list .verse-n:nth-child(odd):hover {
+    background-color: var(--odd-row-hover);
+}
+
+#container #chapter-list .verse-n:nth-child(even):hover {
+    background-color: var(--even-row-hover);
+}

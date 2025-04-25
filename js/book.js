@@ -13,19 +13,52 @@ const options = {
 fetch(`/load-book`, options)
     .then(res => res.json())
     .then(data => {        
-        // console.log(data);
-        const bookName = data['bookName'];
-        let chapterNum = 1;
+        console.log(data);
 
+        const bookName = data['bookName'];
+        const lastChapter = data['verses'][data['verses'].length - 1].chapter;
+        let chapterNum = 1;
 
         const title = document.getElementById('book-title');
         title.innerText = `${bookName}`;
 
         let verses = data['verses'].filter(verse => verse.chapter === chapterNum);
-        loadChapter();
+        loadChapter(chapterNum);
 
+        const selectChapterBtn = document.getElementById('select-chapter');
         const prevBtn = document.getElementById('prev');
         const nextBtn = document.getElementById('next');
+
+        selectChapterBtn.onclick = () => {
+            let chapterList = document.getElementById('chapter-list');
+            console.log(chapterList);
+
+            if  (chapterList === null) {
+                chapterList = document.createElement('div');
+                chapterList.id = 'chapter-list';
+                
+                let element = null;
+                for (let i = 1; i <= lastChapter; i++) {
+                    element = document.createElement('div')
+                    element.innerText = i;
+                    element.classList.add('verse-n');
+
+                    element.onclick = () => {
+                        chapterNum = i;
+                        verses = data['verses'].filter(verse => verse.chapter === chapterNum);
+                        loadChapter(chapterNum);
+                    }   
+
+                    chapterList.appendChild(element);   
+                }
+
+                selectChapterBtn.appendChild(chapterList);
+            }
+            else {
+                chapterList.remove();
+            }
+
+        };
 
         prevBtn.onclick = () => {
             chapterNum--;
@@ -35,7 +68,7 @@ fetch(`/load-book`, options)
                 chapterNum++;
             }
             else {
-                loadChapter();
+                loadChapter(chapterNum);
             }
         };
 
@@ -47,15 +80,19 @@ fetch(`/load-book`, options)
                 chapterNum--;
             }
             else {
-                loadChapter();
+                loadChapter(chapterNum);
             }        
         };
 
-        function loadChapter() {
+        function loadChapter(chapterNum) {
             const headerCont = document.getElementById('header');
-            headerCont.innerHTML = '';
-            headerCont.innerHTML = `<h1>${bookName}</h1>
-                                    <h3>Chapter ${chapterNum}</h3>`;
+
+            const bookNameHeader = headerCont.querySelector(':scope > #book-name');
+            const selectChapterBtn = headerCont.querySelector(':scope > #select-chapter');
+            const chapterNumSpan = selectChapterBtn.querySelector(':scope > #chapter-num');
+
+            bookNameHeader.innerText = bookName;
+            chapterNumSpan.innerText = `Chapter ${chapterNum}`;
 
             const versesCont = document.getElementById('verses');
             versesCont.innerHTML = '';

@@ -1,3 +1,11 @@
+:root {
+    --odd-row: #ffffff;
+    --odd-row-hover: #f1f1f1;
+
+    --even-row: #dfdfdf;
+    --even-row-hover: #b6b6b6;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
@@ -58,24 +66,24 @@ main {
 
 #old-testament .book:nth-child(odd), 
 #new-testament .book:nth-child(odd) {
-    background-color: white;
+    background-color: var(--odd-row);
     color: black;
 }
 
 #old-testament .book:nth-child(even), 
 #new-testament .book:nth-child(even) {
-    background-color: rgb(223, 223, 223);
+    background-color: var(--even-row);
     color: rgb(0, 0, 0);
 }
 
 #old-testament .book:nth-child(odd):hover, 
 #new-testament .book:nth-child(odd):hover {
-    background-color: rgb(241, 241, 241);
+    background-color: var(--odd-row-hover);
     cursor: pointer;
 }
 
 #old-testament .book:nth-child(even):hover, 
 #new-testament .book:nth-child(even):hover {
-    background-color: rgb(182, 182, 182);
+    background-color: var(--even-row-hover);
     cursor: pointer;
 }
